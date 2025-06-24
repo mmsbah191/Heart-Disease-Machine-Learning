@@ -8,7 +8,7 @@ from sklearn.compose import ColumnTransformer
 # سيرة عمل: قراءة البيانات وتعديد الأعمدة وتحضير البيانات للتدريب
 
 # قراءة الملف المنظف واستخراج X, y
-def load_data(filepath="datasets/heart_disease_cleaned.csv"):
+def load_data(filepath="../datasets/heart_disease_cleaned.csv"):
     df = pd.read_csv(filepath)
     X = df.drop("target", axis=1)
     y = df["target"]
