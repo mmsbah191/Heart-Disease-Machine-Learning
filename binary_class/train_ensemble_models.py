@@ -14,8 +14,6 @@ from sklearn.metrics import (
     recall_score,
     f1_score,
     confusion_matrix,
-    mean_absolute_error,
-    mean_squared_error,
 )
 from sklearn.ensemble import (
     VotingClassifier,

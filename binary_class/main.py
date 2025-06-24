@@ -3,11 +3,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import ConfusionMatrixDisplay
 
 from data_preparation import load_data
-from ensemble_models import evaluate_ensemble_models
-from model_training import (evaluate_with_cross_validation,
+from train_ensemble_models import evaluate_ensemble_models
+from evaluate_split import (evaluate_with_cross_validation,
                             evaluate_with_stratified_kfold,
                             evaluate_with_train_test)
 
