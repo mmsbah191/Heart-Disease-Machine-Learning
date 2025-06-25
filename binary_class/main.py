@@ -2,13 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from sklearn.linear_model import LogisticRegression
-
 from data_preparation import load_data
-from train_ensemble_models import evaluate_ensemble_models
 from evaluate_split import (evaluate_with_cross_validation,
                             evaluate_with_stratified_kfold,
                             evaluate_with_train_test)
+from sklearn.linear_model import LogisticRegression
+from train_ensemble_models import evaluate_ensemble_models
 
 
 def plot_cv_boxplot(cv_scores_dict):
@@ -108,9 +107,6 @@ def main():
 
     if cv_scores_all:
         plot_cv_boxplot(cv_scores_all)
-
-
-
 
 if __name__ == "__main__":
     main()
