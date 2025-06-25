@@ -91,7 +91,7 @@ def main():
                 print(f"  {metric}:")
                 print(res)
                 # عرض مصفوفة الارتباك رسمياً
-                plot_confusion_matrix(res, ens_model)
+                # plot_confusion_matrix(res, ens_model)
             elif res is None:
                 print(f"  {metric}: None")
             else:
