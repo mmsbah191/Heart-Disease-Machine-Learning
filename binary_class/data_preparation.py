@@ -1,8 +1,8 @@
 # data_preparation.py
 
 import pandas as pd
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 # سيرة عمل: قراءة البيانات وتعديد الأعمدة وتحضير البيانات للتدريب
 
@@ -45,12 +45,9 @@ def prepare_full_data(X, y):
     X_processed = preprocessor.fit_transform(X)
     return X_processed, y, preprocessor
 
-# from data_preparation import load_data, prepare_train_test_split
 
 # X, y = load_data()
 # X_train, X_test, y_train, y_test, preprocessor = prepare_train_test_split(X, y)
-
-# from data_preparation import load_data, prepare_full_data
-
-# X, y = load_data()
 # X_processed, y, preprocessor = prepare_full_data(X, y)
+# print(X_processed.shape)  # dimmision
+
