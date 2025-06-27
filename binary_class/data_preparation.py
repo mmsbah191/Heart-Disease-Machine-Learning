@@ -45,12 +45,8 @@ def prepare_full_data(X, y):
     X_processed = preprocessor.fit_transform(X)
     return X_processed, y, preprocessor
 
-# from data_preparation import load_data, prepare_train_test_split
 
 # X, y = load_data()
 # X_train, X_test, y_train, y_test, preprocessor = prepare_train_test_split(X, y)
-
-# from data_preparation import load_data, prepare_full_data
-
-# X, y = load_data()
 # X_processed, y, preprocessor = prepare_full_data(X, y)
+# print(X_processed.shape)  # dimmision

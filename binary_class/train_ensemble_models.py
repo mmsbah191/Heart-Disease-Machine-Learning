@@ -1,20 +1,13 @@
 # ensemble_models.py
 from sklearn.calibration import cross_val_predict
+from sklearn.model_selection import StratifiedKFold
+from evaluate_split import *
 from sklearn.metrics import (
-    accuracy_score,
-    precision_score,
-    recall_score,
-    f1_score,
-    confusion_matrix,
-    roc_auc_score,
+    accuracy_score, precision_score, recall_score, f1_score,
+    confusion_matrix, roc_auc_score, cohen_kappa_score,
+    matthews_corrcoef, mean_absolute_error, mean_squared_error
 )
-from sklearn.metrics import (
-    accuracy_score,
-    precision_score,
-    recall_score,
-    f1_score,
-    confusion_matrix,
-)
+import numpy as np
 from sklearn.ensemble import (
     VotingClassifier,
     RandomForestClassifier,
@@ -33,13 +26,9 @@ from sklearn.model_selection import cross_val_score
 from data_preparation import build_preprocessor
 
 
-def evaluate_ensemble_models(X, y, cv=5):
-    # تجهيز المعالج المسبق للبيانات (OneHot + Scaling)
-    preprocessor = build_preprocessor(X)
-    X_processed = preprocessor.fit_transform(X)
 
-    # تعريف النماذج المختلفة المستخدمة في التصنيف (Ensemble Models)
-    models = {
+# تعريف النماذج المختلفة المستخدمة في التصنيف (Ensemble Models)
+models = {
         # نموذج Stacking Classifier: يتم دمج العديد من النماذج الأساسية
         # (Base Learners) ويتم استخدام نموذج نهائي للتصنيف.
         # Stacking = التعلم من "تنبؤات" عدة نماذج.
@@ -97,33 +86,17 @@ def evaluate_ensemble_models(X, y, cv=5):
         ),
     }
 
+
+
+def evaluate_ensemble_models(X,y):
     ensemble_results = {}
     for name, model in models.items():
-        # نحصل على التنبؤات باستخدام cross_val_predict
-        y_pred = cross_val_predict(model, X_processed, y, cv=cv)
-
-        # نحسب المقاييس
-        acc = accuracy_score(y, y_pred)
-        prec = precision_score(y, y_pred, zero_division=0)
-        rec = recall_score(y, y_pred, zero_division=0)
-        f1 = f1_score(y, y_pred, zero_division=0)
-        cm = confusion_matrix(y, y_pred)
-        try:
-            roc_auc = roc_auc_score(y, y_pred)
-        except:
-            roc_auc = None  # لو ماينفع حساب ROC AUC
-
-        ensemble_results[name] = {
-            "accuracy": acc,
-            "precision": prec,
-            "recall": rec,
-            "f1_score": f1,
-            "confusion_matrix": cm,
-            "roc_auc": roc_auc,
-        }
+        metrics=evaluate_with_train_test(model, X, y)
+        metrics=evaluate_with_cross_validation(model, X, y)
+        metrics=evaluate_with_stratified_kfold(model, X, y)
+        ensemble_results[name] = metrics
 
     return ensemble_results
-
 
 """
 النماذج الأساسية (base learners)
