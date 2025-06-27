@@ -1,19 +1,15 @@
-# ensemble_models.py
-from split_train_evalute import train_test_taker,cross_validation_taker,stratified_kfold_taker
-from sklearn.ensemble import (
-    AdaBoostClassifier,
-    BaggingClassifier,
-    ExtraTreesClassifier,
-    GradientBoostingClassifier,
-    RandomForestClassifier,
-    StackingClassifier,
-    VotingClassifier,
-)
+# train_ensemble_models.py
+from sklearn.ensemble import (AdaBoostClassifier, BaggingClassifier,
+                              ExtraTreesClassifier, GradientBoostingClassifier,
+                              RandomForestClassifier, StackingClassifier,
+                              VotingClassifier)
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+from split_train_evalute import (cross_validation_taker,
+                                 stratified_kfold_taker, train_test_taker)
 
 # تعريف النماذج المختلفة المستخدمة في التصنيف (Ensemble Models)
 models = {

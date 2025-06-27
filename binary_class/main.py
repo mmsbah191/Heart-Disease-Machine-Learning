@@ -4,8 +4,11 @@ import pandas as pd
 import seaborn as sns
 from data_preparation import load_data
 from sklearn.linear_model import LogisticRegression
-from split_train_evalute import (cross_validation_taker,
-                                 stratified_kfold_taker, train_test_taker)
+from split_train_evalute import (
+    cross_validation_taker,
+    stratified_kfold_taker,
+    train_test_taker,
+)
 from train_ensemble_models import evaluate_ensemble_models
 
 
@@ -56,45 +59,42 @@ def main():
     # تحميل البيانات بعد التنظيف
     X, y = load_data()
 
-    # # سنجرب فقط نموذج الانحدار اللوجستي مع max_iter=1000
-    # model_name = "Logistic Regression"
-    # model = LogisticRegression(max_iter=1000)
+    # سنجرب فقط نموذج الانحدار اللوجستي مع max_iter=1000
+    model_name = "Logistic Regression"
+    model = LogisticRegression(max_iter=1000)
 
-    # print(f"\n▶ {model_name} - Train/Test Split Evaluation")
-    # result = evaluate_with_train_test(model, X, y)
-    # for metric, res in result.items():
-    #     if metric != "train_test_predictions":
-    #         if isinstance(res, float):
-    #             print(f"{metric}: {res:.4f}")
-    #         elif metric == "confusion_matrix":
-    #             # print(f"  {metric}:")
-    #             # print(res)
-    #             # plot_confusion_matrix(res, model)
-    #             pass
+    print(f"\n▶ {model_name} - Train/Test Split Evaluation")
+    result = train_test_taker(model, X, y)
+    for metric, res in result.items():
+            if isinstance(res, float):
+                print(f"{metric}: {res:.4f}")
+            elif metric == "confusion_matrix":
+                print(f"  {metric}:")
+                print(res)
+                # plot_confusion_matrix(res, model)
+                pass
 
-    # print(f"\n▶ {model_name} - Cross-Validation Evaluation")
-    # result = evaluate_with_cross_validation(model, X, y)
-    # for metric, res in result.items():
-    #     if metric != "cv_predictions":
-    #         if isinstance(res, float):
-    #             print(f"{metric}: {res:.4f}")
-    #         elif metric == "confusion_matrix":
-    #             # print(f"  {metric}:")
-    #             # print(res)
-    #             # plot_confusion_matrix(res, model)
-    #             pass
+    print(f"\n▶ {model_name} - Cross-Validation Evaluation")
+    result = cross_validation_taker(model, X, y)
+    for metric, res in result.items():
+            if isinstance(res, float):
+                print(f"{metric}: {res:.4f}")
+            elif metric == "confusion_matrix":
+                print(f"  {metric}:")
+                print(res)
+                # plot_confusion_matrix(res, model)
+                pass
 
-    # print(f"\n▶ {model_name} - Stratified K-Fold Evaluation")
-    # result = evaluate_with_stratified_kfold(model, X, y)
-    # for metric, res in result.items():
-    #     if metric != "skf_predictions":
-    #         if isinstance(res, float):
-    #             print(f"{metric}: {res:.4f}")
-    #         elif metric == "confusion_matrix":
-    #             # print(f"  {metric}:")
-    #             # print(res)
-    #             # plot_confusion_matrix(res, model)
-    #             pass
+    print(f"\n▶ {model_name} - Stratified K-Fold Evaluation")
+    result = stratified_kfold_taker(model, X, y)
+    for metric, res in result.items():
+            if isinstance(res, float):
+                print(f"{metric}: {res:.4f}")
+            elif metric == "confusion_matrix":
+                print(f"  {metric}:")
+                print(res)
+                # plot_confusion_matrix(res, model)
+                pass
 
     print("\n▶ Ensemble Model Comparison")
     ensemble_results = evaluate_ensemble_models(X, y)
@@ -108,23 +108,19 @@ def main():
             print(f"\n🔸 {split_method.upper()} Evaluation:")
             for metric, res in metrics.items():
                 if metric in (
-                    "train_test_predictions",
-                    "cv_predictions",
-                    "skf_predictions",
-                    "cv_probabilities",
-                    "skf_probabilities",
+                    "all_folds",
+                    "predictions",
+                    "performance_metrics",
+                    "probabilities",
                 ):
                     continue
-                elif isinstance(res, float):
+                if isinstance(res, float):
                     print(f"{metric}: {res:.4f}")
                 elif metric == "confusion_matrix":
                     print(f"  {metric}:")
                     print(res)
                     # plot_confusion_matrix(res, ens_model)
-                elif res is None:
-                    print(f"  {metric}: None")
-                # else:
-                #     print(f"  {metric}: {res}")
+
 
             # تخزين دقة CV للرسم البياني إذا متوفر cv_scores
             # لكن في النسخة الحالية cv_scores غير موجودة، نستخدم 'accuracy' كمقياس

@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
@@ -14,7 +15,7 @@ import json
 import os
 
 # --- Data Preparation ---
-def load_data(filepath="datasets/heart_disease_cleaned.csv"):
+def load_data(filepath="../datasets/heart_disease_cleaned.csv"):
     """Load the cleaned heart disease dataset and return features X and target y."""
     df = pd.read_csv(filepath)
     X = df.drop("target", axis=1)
