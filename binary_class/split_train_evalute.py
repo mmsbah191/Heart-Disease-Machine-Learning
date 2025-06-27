@@ -144,6 +144,7 @@ def cross_validation_taker(model, X, y, cv=5):
 
     y_pred = cross_val_predict(model, X_processed, y, cv=cv)
 
+#model_result
     return (
         mean_scores
         | cm
