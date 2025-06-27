@@ -2,13 +2,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from sklearn.linear_model import LogisticRegression
-
 from data_preparation import load_data
+from sklearn.linear_model import LogisticRegression
+from split_train_evalute import (cross_validation_taker,
+                                 stratified_kfold_taker, train_test_taker)
 from train_ensemble_models import evaluate_ensemble_models
-from evaluate_split import (evaluate_with_cross_validation,
-                            evaluate_with_stratified_kfold,
-                            evaluate_with_train_test)
 
 
 def plot_cv_boxplot(cv_scores_dict):
@@ -38,7 +36,14 @@ def plot_model_comparison_bar(comparison_df):
 
 def plot_confusion_matrix(cm, model_name):
     plt.figure(figsize=(6, 5))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+    sns.heatmap(
+        cm,
+        annot=True,
+        fmt="d",
+        cmap="Blues",
+        xticklabels=["Negative", "Positive"],
+        yticklabels=["Negative", "Positive"],
+    )
     plt.title(f"Confusion Matrix for {model_name}")
     plt.xlabel("Predicted Label")
     plt.ylabel("True Label")
@@ -66,7 +71,7 @@ def main():
     #             # print(res)
     #             # plot_confusion_matrix(res, model)
     #             pass
-            
+
     # print(f"\n▶ {model_name} - Cross-Validation Evaluation")
     # result = evaluate_with_cross_validation(model, X, y)
     # for metric, res in result.items():
@@ -97,11 +102,20 @@ def main():
     # جمع لكل نموذج للرسم البياني
     cv_scores_all = {}
 
-    for ens_model, metrics in ensemble_results.items():
+    for ens_model, evaluate_metrics in ensemble_results.items():
         print(f"\n{ens_model}:")
-        for metric, res in metrics.items():
-            if metric != "skf_predictions":
-                if isinstance(res, float):
+        for split_method, metrics in evaluate_metrics.items():
+            print(f"\n🔸 {split_method.upper()} Evaluation:")
+            for metric, res in metrics.items():
+                if metric in (
+                    "train_test_predictions",
+                    "cv_predictions",
+                    "skf_predictions",
+                    "cv_probabilities",
+                    "skf_probabilities",
+                ):
+                    continue
+                elif isinstance(res, float):
                     print(f"{metric}: {res:.4f}")
                 elif metric == "confusion_matrix":
                     print(f"  {metric}:")
@@ -109,20 +123,18 @@ def main():
                     # plot_confusion_matrix(res, ens_model)
                 elif res is None:
                     print(f"  {metric}: None")
-                else:
-                    print(f"  {metric}: {res:.4f}")
+                # else:
+                #     print(f"  {metric}: {res}")
 
-        # تخزين دقة CV للرسم البياني إذا متوفر cv_scores
-        # لكن في النسخة الحالية cv_scores غير موجودة، نستخدم 'accuracy' كمقياس
-        if "accuracy" in metrics:
-            cv_scores_all[ens_model] = np.repeat(
-                metrics["accuracy"], 5
-            )  # مجرد تقريب لـ boxplot
+            # تخزين دقة CV للرسم البياني إذا متوفر cv_scores
+            # لكن في النسخة الحالية cv_scores غير موجودة، نستخدم 'accuracy' كمقياس
+            if "accuracy" in metrics:
+                cv_scores_all[ens_model] = np.repeat(
+                    metrics["accuracy"], 5
+                )  # مجرد تقريب لـ boxplot
 
     if cv_scores_all:
         plot_cv_boxplot(cv_scores_all)
-
-
 
 
 if __name__ == "__main__":
